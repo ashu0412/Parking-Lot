@@ -1,4 +1,3 @@
-import jdk.nashorn.internal.objects.annotations.Getter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,11 +58,11 @@ public class ParkingLot {
         return false;
     }
 
-    private static void createParkingLot(int numberOfSlots) {
+    private void createParkingLot(int numberOfSlots) {
         totalNumberOfSlots += numberOfSlots;
     }
 
-    private static int allotSlotNumber(Vehicle v) {
+    private int allotSlotNumber(Vehicle v) {
         int freeSlot = getFreeSlot();
         if (freeSlot > totalNumberOfSlots || freeSlot == 0) {
             return -1;
@@ -73,11 +72,11 @@ public class ParkingLot {
         return freeSlot;
     }
 
-    private static void freeSlot(int slotNumber) {
+    private void freeSlot(int slotNumber) {
         vehicleHashMap.remove(slotNumber);
     }
 
-    private static List<String> registrationNumbersWithColor(String color) {
+    private List<String> registrationNumbersWithColor(String color) {
         List<String> regNumbers = new ArrayList<>();
         for(Map.Entry<Integer, Vehicle> entry : vehicleHashMap.entrySet()) {
             Vehicle value = entry.getValue();
@@ -88,7 +87,7 @@ public class ParkingLot {
         return regNumbers;
     }
 
-    private static int getSlotNumberWithRegNumber(String regNumber) {
+    private int getSlotNumberWithRegNumber(String regNumber) {
         for(Map.Entry<Integer, Vehicle> entry : vehicleHashMap.entrySet()) {
             int key = entry.getKey();
             Vehicle value = entry.getValue();
@@ -99,7 +98,7 @@ public class ParkingLot {
         return -1;
     }
 
-    private static List<Integer> getSlotNumberWithColor(String color) {
+    private List<Integer> getSlotNumberWithColor(String color) {
         List<Integer> colors = new ArrayList<>();
         for(Map.Entry<Integer, Vehicle> entry : vehicleHashMap.entrySet()) {
             int key = entry.getKey();
@@ -111,7 +110,7 @@ public class ParkingLot {
         return colors;
     }
 
-    private static void getStatusOfParkingLot() {
+    private void getStatusOfParkingLot() {
         System.out.println("Slot No." + " " + "Registration No" + " " + "Colour");
         for(Map.Entry<Integer, Vehicle> entry : vehicleHashMap.entrySet()) {
             int key = entry.getKey();
@@ -125,6 +124,7 @@ public class ParkingLot {
         Scanner sc = new Scanner(System.in);
         String cmd;
         List<String> commandList;
+        ParkingLot parkingLot = new ParkingLot();
 
         do {
             cmd = sc.nextLine();
@@ -134,31 +134,31 @@ public class ParkingLot {
                 List<String> commandLines = getCommands(cmd);
                 for (String commandLine : commandLines) {
                     List<String> commandArgs = Arrays.asList(commandLine.split(SPLIT_REGEX));
-                    processCommands(commandArgs);
+                    processCommands(commandArgs, parkingLot);
                 }
             } else if (cmd.contains("exit")) {
                 break;
             } else
             {
-                processCommands(commandList);
+                processCommands(commandList, parkingLot);
             }
         } while (true);
     }
 
-    private static void processCommands(List<String> commands) {
+    private static void processCommands(List<String> commands, ParkingLot parkingLot) {
         String command = commands.get(0);
         if (enumContainsValue(command)) {
             Commands cmd = Commands.valueOf(command);
             switch (cmd) {
                 case create_parking_lot:
-                    createParkingLot(Integer.parseInt(commands.get(1)));
+                    parkingLot.createParkingLot(Integer.parseInt(commands.get(1)));
                     System.out.println("Created a parking slot with " + commands.get(1) + " slots");
                     break;
                 case park:
                     String regNumber = commands.get(1);
                     String color = commands.get(2);
                     Vehicle v = new Vehicle(regNumber, color);
-                    int allottedSlot = allotSlotNumber(v);
+                    int allottedSlot = parkingLot.allotSlotNumber(v);
                     if (allottedSlot != -1) {
                         System.out.println("Allocated slot number: " + allottedSlot);
                     } else {
@@ -166,27 +166,27 @@ public class ParkingLot {
                     }
                     break;
                 case leave:
-                    freeSlot(Integer.parseInt(commands.get(1)));
+                    parkingLot.freeSlot(Integer.parseInt(commands.get(1)));
                     System.out.println("Slot number " + commands.get(1) + " is free");
                     break;
                 case status:
-                    getStatusOfParkingLot();
+                    parkingLot.getStatusOfParkingLot();
                     break;
                 case registration_numbers_for_cars_with_colour:
-                    String numbersList = registrationNumbersWithColor(commands.get(1)).toString();
+                    String numbersList = parkingLot.registrationNumbersWithColor(commands.get(1)).toString();
                     System.out.println(numbersList.substring(1, numbersList.length()-1));
                     break;
                 case slot_numbers_for_cars_with_colour:
-                    if(!getSlotNumberWithColor(commands.get(1)).isEmpty()) {
-                        String numberList = getSlotNumberWithColor(commands.get(1)).toString();
+                    if(!parkingLot.getSlotNumberWithColor(commands.get(1)).isEmpty()) {
+                        String numberList = parkingLot.getSlotNumberWithColor(commands.get(1)).toString();
                         System.out.println(numberList.substring(1, numberList.length() - 1));
                     } else {
                         System.out.println("Not found");
                     }
                     break;
                 case slot_number_for_registration_number:
-                    if (getSlotNumberWithRegNumber(commands.get(1)) != -1) {
-                        System.out.println(getSlotNumberWithRegNumber(commands.get(1)));
+                    if (parkingLot.getSlotNumberWithRegNumber(commands.get(1)) != -1) {
+                        System.out.println(parkingLot.getSlotNumberWithRegNumber(commands.get(1)));
                     } else {
                         System.out.println("Not found");
                     }

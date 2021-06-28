@@ -1,4 +1,12 @@
-package PACKAGE_NAME;/**
+import org.junit.jupiter.api.Test;
+
+/**
  * @author ashesh.pandey
- */public class ParkingLotTest {
+ */
+public class ParkingLotTest {
+
+
+    @Test
+    public void testCreateParkingLot() {
+    }
 }
