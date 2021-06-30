@@ -42,6 +42,26 @@ public class ParkingLotTest {
         assert(output.contains("KA01HH9999"));
     }
 
+    @Test
+    public void testRegistrationNumbersWithColor() {
+        ParkingLot parkingLot = new ParkingLot();
+        Vehicle v1 = new Vehicle("ABC", "green");
+        Vehicle v2 = new Vehicle("XYZ", "white");
+        parkingLot.vehicleHashMap.put(1, v1);
+        parkingLot.vehicleHashMap.put(2, v2);
+        assertEquals(1, parkingLot.registrationNumbersWithColor("white").size());
+    }
+
+    @Test
+    public void testGetSlotNumberWithRegNumber() {
+        ParkingLot parkingLot = new ParkingLot();
+        Vehicle v1 = new Vehicle("ABC", "green");
+        Vehicle v2 = new Vehicle("XYZ", "white");
+        parkingLot.vehicleHashMap.put(1, v1);
+        parkingLot.vehicleHashMap.put(2, v2);
+        assertEquals(1, parkingLot.getSlotNumberWithRegNumber("ABC"));
+    }
+
 //    @After
 //    public void aft() throws FileNotFoundException {
 //        String exitInput = "exit";

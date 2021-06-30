@@ -59,25 +59,25 @@ public class ParkingLot {
         return false;
     }
 
-    private void createParkingLot(int numberOfSlots) {
-        totalNumberOfSlots += numberOfSlots;
+    private void createParkingLot(int numberOfSlots, ParkingLot parkingLot) {
+        parkingLot.totalNumberOfSlots += numberOfSlots;
     }
 
     public int allotSlotNumber(Vehicle v, ParkingLot parkingLot) {
         int freeSlot = getFreeSlot(parkingLot);
-        if (freeSlot > totalNumberOfSlots || freeSlot == 0) {
+        if (freeSlot > parkingLot.totalNumberOfSlots || freeSlot == 0) {
             return -1;
         } else {
-            vehicleHashMap.put(freeSlot, v);
+            parkingLot.vehicleHashMap.put(freeSlot, v);
         }
         return freeSlot;
     }
 
-    private void freeSlot(int slotNumber) {
-        vehicleHashMap.remove(slotNumber);
+    public void freeSlot(int slotNumber, ParkingLot parkingLot) {
+        parkingLot.vehicleHashMap.remove(slotNumber);
     }
 
-    private List<String> registrationNumbersWithColor(String color) {
+    public List<String> registrationNumbersWithColor(String color) {
         List<String> regNumbers = new ArrayList<>();
         for(Map.Entry<Integer, Vehicle> entry : vehicleHashMap.entrySet()) {
             Vehicle value = entry.getValue();
@@ -88,7 +88,7 @@ public class ParkingLot {
         return regNumbers;
     }
 
-    private int getSlotNumberWithRegNumber(String regNumber) {
+    public int getSlotNumberWithRegNumber(String regNumber) {
         for(Map.Entry<Integer, Vehicle> entry : vehicleHashMap.entrySet()) {
             int key = entry.getKey();
             Vehicle value = entry.getValue();
@@ -157,7 +157,7 @@ public class ParkingLot {
             Commands cmd = Commands.valueOf(command);
             switch (cmd) {
                 case create_parking_lot:
-                    parkingLot.createParkingLot(Integer.parseInt(commands.get(1)));
+                    parkingLot.createParkingLot(Integer.parseInt(commands.get(1)), parkingLot);
                     System.out.println("Created a parking slot with " + commands.get(1) + " slots");
                     break;
                 case park:
@@ -172,7 +172,7 @@ public class ParkingLot {
                     }
                     break;
                 case leave:
-                    parkingLot.freeSlot(Integer.parseInt(commands.get(1)));
+                    parkingLot.freeSlot(Integer.parseInt(commands.get(1)), parkingLot);
                     System.out.println("Slot number " + commands.get(1) + " is free");
                     break;
                 case status:
