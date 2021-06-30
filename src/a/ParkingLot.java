@@ -1,3 +1,4 @@
+package a;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,15 +31,15 @@ class Vehicle {
  */
 public class ParkingLot {
 
-    static Map<Integer, Vehicle> vehicleHashMap = new HashMap<>();
-    static int totalNumberOfSlots = 0;
+    Map<Integer, Vehicle> vehicleHashMap = new HashMap<>();
+    int totalNumberOfSlots = 0;
     public static final String INVALID_COMMANDS = "INVALID COMMANDS";
     public static final String SPLIT_REGEX = " ";
 
-    private static int getFreeSlot() {
+    private int getFreeSlot(ParkingLot parkingLot) {
         int freeSlot = 0;
-        for (int i = 1; i <= totalNumberOfSlots; i++) {
-            if (!vehicleHashMap.containsKey(i)) {
+        for (int i = 1; i <= parkingLot.totalNumberOfSlots; i++) {
+            if (!parkingLot.vehicleHashMap.containsKey(i)) {
                 freeSlot = i;
                 break;
             }
@@ -62,8 +63,8 @@ public class ParkingLot {
         totalNumberOfSlots += numberOfSlots;
     }
 
-    private int allotSlotNumber(Vehicle v) {
-        int freeSlot = getFreeSlot();
+    public int allotSlotNumber(Vehicle v, ParkingLot parkingLot) {
+        int freeSlot = getFreeSlot(parkingLot);
         if (freeSlot > totalNumberOfSlots || freeSlot == 0) {
             return -1;
         } else {
@@ -122,12 +123,17 @@ public class ParkingLot {
     public static  void main(String[] args) throws FileNotFoundException {
 
         Scanner sc = new Scanner(System.in);
-        String cmd;
+        String cmd = "";
         List<String> commandList;
         ParkingLot parkingLot = new ParkingLot();
 
         do {
-            cmd = sc.nextLine();
+            try {
+                cmd = sc.nextLine();
+            } catch (Exception e) {
+                cmd = "exit";
+                System.out.println(e.getMessage());
+            }
             commandList = Arrays.asList(cmd.split(SPLIT_REGEX));
 
             if (cmd.contains(".txt")) {
@@ -158,7 +164,7 @@ public class ParkingLot {
                     String regNumber = commands.get(1);
                     String color = commands.get(2);
                     Vehicle v = new Vehicle(regNumber, color);
-                    int allottedSlot = parkingLot.allotSlotNumber(v);
+                    int allottedSlot = parkingLot.allotSlotNumber(v, parkingLot);
                     if (allottedSlot != -1) {
                         System.out.println("Allocated slot number: " + allottedSlot);
                     } else {
