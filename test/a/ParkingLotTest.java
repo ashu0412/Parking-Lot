@@ -15,11 +15,6 @@ import static org.junit.Assert.*;
  */
 public class ParkingLotTest {
 
-    @Before
-    public void bef() {
-//        ParkingLot.totalNumberOfSlots = 6;
-    }
-
     @Test
     public void testAllotSlotNumber() {
         ParkingLot pl = new ParkingLot();
@@ -73,12 +68,4 @@ public class ParkingLotTest {
         parkingLot.vehicleHashMap.put(3, v3);
         assertEquals(2, parkingLot.getSlotNumberWithColor("green").size());
     }
-
-//    @After
-//    public void aft() throws FileNotFoundException {
-//        String exitInput = "exit";
-//        ByteArrayInputStream bais1 = new ByteArrayInputStream(exitInput.getBytes());
-//        System.setIn(bais1);
-//        ParkingLot.main(null);
-//    }
 }
