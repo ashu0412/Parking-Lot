@@ -99,7 +99,7 @@ public class ParkingLot {
         return -1;
     }
 
-    private List<Integer> getSlotNumberWithColor(String color) {
+    public List<Integer> getSlotNumberWithColor(String color) {
         List<Integer> colors = new ArrayList<>();
         for(Map.Entry<Integer, Vehicle> entry : vehicleHashMap.entrySet()) {
             int key = entry.getKey();
